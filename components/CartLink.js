@@ -17,10 +17,10 @@ function CartLink(props) {
       sm:top-53 right-24 desktop:right-flexiblemargin
       top-40 z-10">
         <div className="flex flex-1 justify-end pr-4 relative">
-          <Link href="/cart">
-            <a aria-label="Cart">
-              <FaShoppingCart />
-            </a>
+          <Link href="/cart" aria-label="Cart">
+
+            <FaShoppingCart />
+
           </Link>
           {
             renderClientSideComponent && numberOfItemsInCart > Number(0) && (
@@ -30,7 +30,7 @@ function CartLink(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function CartLinkWithContext(props) {
