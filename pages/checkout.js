@@ -225,7 +225,7 @@ const Checkout = ({ context }) => {
                       disabled={!stripe}
                       onClick={handleSubmit}
                       className="hidden md:block bg-primary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline"
-                      type="button"
+                      
                     >
                       Confirm order
                     </button>
@@ -256,7 +256,7 @@ const Checkout = ({ context }) => {
                   disabled={!stripe}
                   onClick={handleSubmit}
                   className="md:hidden bg-primary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline"
-                  type="button"
+                  
                 >
                   Confirm order
                 </button>
