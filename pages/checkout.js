@@ -91,7 +91,7 @@ const Checkout = ({ context }) => {
     const cardElement = elements.getElement(CardElement)
 
     // Use your card Element with other Stripe.js APIs
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    /*const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement,
       billing_details: { name: name },
@@ -100,13 +100,13 @@ const Checkout = ({ context }) => {
     if (error) {
       setErrorMessage(error.message)
       return
-    }
+    }*/
 
     const order = {
       email,
       amount: total,
       address: state, // should this be {street, city, postal_code, state} ?
-      payment_method_id: paymentMethod.id,
+      //payment_method_id: paymentMethod.id,
       receipt_email: "customer@example.com",
       id: uuid(),
     }
