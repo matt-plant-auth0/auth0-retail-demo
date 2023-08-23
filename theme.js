@@ -1,5 +1,5 @@
 const colors = {
-  primary: '#89bdf9'
+  primary: process.env.PRIMARY_COLOR || '#89bdf9'
 }
 
 export {

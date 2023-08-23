@@ -5,7 +5,8 @@ const STORAGE_KEY = 'NEXT_ECOMMERCE_STARTER_'
 const initialState = {
   cart: [],
   numberOfItemsInCart: 0,
-  total: 0
+  total: 0,
+  isCartEmpty: true
 }
 
 const SiteContext = React.createContext()

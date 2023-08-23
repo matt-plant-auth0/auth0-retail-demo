@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Center, Footer, Tag, Showcase, DisplaySmall, DisplayMedium } from '../components'
 import { titleIfy, slugify } from '../utils/helpers'
 import { fetchInventory } from '../utils/inventoryProvider'
-import CartLink from '../components/CartLink'
+import { colors } from '../theme'
 
 const Home = ({ inventoryData = [], categories: categoryData = [] }) => {
   const inventory = inventoryData.slice(0, 4)
@@ -10,19 +10,18 @@ const Home = ({ inventoryData = [], categories: categoryData = [] }) => {
 
   return (
     <>
-      <CartLink />
       <div className="w-full">
         <Head>
           <title>Jamstack ECommerce</title>
           <meta name="description" content="Jamstack ECommerce Next provides a way to quickly get up and running with a fully configurable ECommerce site using Next.js." />
           <meta property="og:title" content="Jamstack ECommerce" key="title" />
         </Head>
-        <div className="bg-blue-300
+        <div className="bg-primary
         p-6 pb-10 smpb-6
         flex lg:flex-row flex-col">
           <div className="pt-4 pl-2 sm:pt-12 sm:pl-12 flex flex-col">
             <Tag
-              year="2021"
+              year="2023"
               category="SOFAS"
             />
             <Center

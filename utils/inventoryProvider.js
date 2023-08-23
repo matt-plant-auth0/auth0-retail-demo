@@ -17,7 +17,13 @@ type Product {
 
 async function fetchInventory() {
   // const inventory = API.get(apiUrl)
-  return Promise.resolve(inventory)
+  if(process.env.INVENTORY_URL){
+    let res = await fetch(process.env.INVENTORY_URL);
+    let remoteInventory = await res.json();
+    return Promise.resolve(remoteInventory);
+  }else{
+    return Promise.resolve(inventory)
+  }
 }
 
 export {

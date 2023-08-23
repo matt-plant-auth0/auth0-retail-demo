@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { SiteContext, ContextProviderComponent } from "../context/mainContext"
 import DENOMINATION from "../utils/currencyProvider"
@@ -6,6 +6,7 @@ import { FaLongArrowAltLeft } from "react-icons/fa"
 import Link from "next/link"
 import Image from "../components/Image"
 import { v4 as uuid } from "uuid"
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 import {
   CardElement,
@@ -48,17 +49,55 @@ const Input = ({ onChange, value, name, placeholder }) => (
   />
 )
 
+
 const Checkout = ({ context }) => {
+  const { user, isLoading } = useUser();
+  const { numberOfItemsInCart, cart, total } = context
   const [errorMessage, setErrorMessage] = useState(null)
   const [orderCompleted, setOrderCompleted] = useState(false)
   const [input, setInput] = useState({
-    name: "",
+    given_name: "",
+    family_name: "",
     email: "",
     street: "",
     city: "",
     postal_code: "",
     state: "",
+    terms: false,
+    privacy: false
   })
+  const [lastOrder, setLastOrder] = useState({
+    id: "",
+    email: "",
+    amount: "",
+    address: {
+      street: "", 
+      city: "", 
+      postal_code: "", 
+      state: ""
+    },
+    orderItems: []
+  })
+  const [personalDetails, setPersonalDetails] = useState({
+    given_name: "",
+    family_name: "",
+    email: ""
+  })
+  useEffect(() => {
+    if(!isLoading){
+      setInput({
+        given_name: user.name !== user.email ? user.name.split(' ')[0] : "",
+        family_name: user.name !== user.email ? user.name.split(' ')[0] : "",
+        email: user.email,
+        street: "",
+        city: "",
+        postal_code: "",
+        state: "",
+        terms: false,
+        privacy: false
+      })
+    }
+  }, [isLoading])
 
   const stripe = useStripe()
   const elements = useElements()
@@ -68,9 +107,33 @@ const Checkout = ({ context }) => {
     setInput({ ...input, [e.target.name]: e.target.value })
   }
 
+  const createAccount = async event => {
+    event.preventDefault()
+    const { terms, privacy } = input;
+
+    if (!user.isSubscriptionAccount && (!terms || !privacy)) {
+      console.log("Consent not accepted!");
+      setErrorMessage("Please accept both below to continue!");
+      return
+    }
+
+    let res = await fetch('/api/user', { 
+      method: 'POST', 
+      headers: { "Content-Type": "application/json" }, 
+      body: JSON.stringify({ personalDetails: personalDetails })
+    });
+
+    let account = await res.json();
+
+    console.log(account);
+
+    window.location.href = account.setPasswordUrl;
+
+  }
+
   const handleSubmit = async event => {
     event.preventDefault()
-    const { name, email, street, city, postal_code, state } = input
+    const { given_name, family_name, email, street, city, postal_code, state } = input
     const { total, clearCart } = context
 
     if (!stripe || !elements) {
@@ -80,7 +143,7 @@ const Checkout = ({ context }) => {
     }
 
     // Validate input
-    if (!street || !city || !postal_code || !state) {
+    if (!email || !street || !city || !postal_code || !state) {
       setErrorMessage("Please fill in the form!")
       return
     }
@@ -88,7 +151,7 @@ const Checkout = ({ context }) => {
     // Get a reference to a mounted CardElement. Elements knows how
     // to find your CardElement because there can only ever be one of
     // each type of element.
-    const cardElement = elements.getElement(CardElement)
+    const cardElement = elements.getElement(CardElement);
 
     // Use your card Element with other Stripe.js APIs
     /*const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -102,26 +165,161 @@ const Checkout = ({ context }) => {
       return
     }*/
 
-    const order = {
-      email,
-      amount: total,
-      address: state, // should this be {street, city, postal_code, state} ?
-      //payment_method_id: paymentMethod.id,
-      receipt_email: "customer@example.com",
-      id: uuid(),
-    }
+    setPersonalDetails({
+      given_name: given_name,
+      family_name: family_name,
+      email: email
+    });
     // TODO call API
+    
+    let lastOrder = {
+      id: uuid(),
+      email: email,
+      amount: total,
+      address: {
+        street: street, 
+        city: city, 
+        postal_code: postal_code, 
+        state: state
+      },
+      orderItems: cart.map(item => {
+        let simplifiedItem = {
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          id: item.id,
+        }
+        return simplifiedItem;
+      })
+    }
+
+    setLastOrder(lastOrder)
+
+    let res = await fetch('/api/orders', { 
+      method: 'POST', 
+      headers: { "Content-Type": "application/json" }, 
+      body: JSON.stringify({ order: lastOrder })
+    });
+
+    let orderId = await res.json();
+
+    console.log(`Order ${orderId.orderId} created successfully`);
+
+    if(user && !user.isSubscriptionAccount){
+      await fetch('/api/user/add-order', { 
+        method: 'PUT', 
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify({ orderId: orderId.orderId })
+      });
+    }
+    
     setOrderCompleted(true)
     clearCart()
   }
 
-  const { numberOfItemsInCart, cart, total } = context
+  
   const cartEmpty = numberOfItemsInCart === Number(0)
 
   if (orderCompleted) {
     return (
-      <div>
-        <h3>Thanks! Your order has been successfully processed.</h3>
+      <div className="flex flex-col items-center pb-10">
+        <div className="flex flex-col w-full c_large:w-c_large">
+          <div className="pt-10 pb-8 border-b">
+            <h2 className="text-5xl font-light mb-6">Thank you - your order was successful!</h2>
+            { user && (
+              <Link href="/account/orders" aria-label="Orders">
+                <div className="cursor-pointer flex  items-center">
+                  <FaLongArrowAltLeft className="mr-2 text-gray-600" />
+                  <p className="text-gray-600 text-sm">View your previous orders</p>
+                </div>
+              </Link>
+            )}
+          </div>
+          <div className="pt-10">
+            <div className="flex items-center">
+              <h3>Order summary:</h3>
+            </div>
+          </div>
+          {lastOrder.orderItems.map((item, index) => {
+            return (
+              <div className="border-b py-10" key={index}>
+                <div className="flex items-center">
+                  <Image
+                    className="w-32 m-0"
+                    src={item.image}
+                    alt={item.name}
+                  />
+                  <p className="m-0 pl-10 text-gray-600">
+                    {item.name}
+                  </p>
+                  <div className="flex flex-1 justify-end">
+                    <p className="m-0 pl-10 text-gray-900 font-semibold">
+                      {DENOMINATION + item.price}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        {!user || user.isSubscriptionAccount && (
+          <>
+          <div className="flex flex-1 flex-col md:flex-row">
+              <div className="flex flex-1 pt-8 flex-col">
+                <div className="mt-4 pt-10">
+                <div className="pt-10">
+                  <Link href="#" onClick={(e) => {
+                    if(!user.isSubscriptionAccount){
+                      e.preventDefault();
+                      document.getElementById('createAccountForm').className = '';
+                    }else{
+                      createAccount(e);
+                    }
+                  }} aria-label="Cart">
+                    <div className="cursor-pointer flex  items-center">
+                      { user.isSubscriptionAccount && (
+                        <p className="text-gray-600 text-sm">Would you like to convert to a full account so you can manage your orders? Click here!</p>
+                      )}
+                      { !user.isSubscriptionAccount && (
+                        <p className="text-gray-600 text-sm">Would you like to create an account? Click here!</p>
+                      )}
+                    </div>
+                  </Link>
+                </div>
+                  <form id='createAccountForm' className='hidden' onSubmit={createAccount}>
+                    {errorMessage ? <span>{errorMessage}</span> : ""}
+                    <label className='md:block' htmlFor='terms'>
+                      <input
+                        onChange={onChange}
+                        className="mt-2 shadow py-2 px-3 leading-tight"
+                        type="checkbox"
+                        name="terms"
+                      />
+                      <span className='text-gray-600 text-sm py-2 px-3'>I accept the terms and conditions</span>
+                    </label>
+                    <label className='md:block' htmlFor='privacy'>
+                      <input
+                        onChange={onChange}
+                        className="mt-2 shadow py-2 px-3 leading-tight"
+                        type="checkbox"
+                        name="privacy"
+                      />
+                      <span className='text-gray-600 text-sm py-2 px-3'>I agree that my data will be held in accordance to the privacy policy</span>
+                    </label>
+                    <button
+                      type="submit"
+                      disabled={!stripe}
+                      onClick={createAccount}
+                      className="md:block bg-primary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                      Continue
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     )
   }
@@ -133,12 +331,7 @@ const Checkout = ({ context }) => {
         <meta name="description" content={`Check out`} />
         <meta property="og:title" content="Jamstack ECommerce - Checkpit" key="title" />
       </Head>
-      <div
-        className="
-            flex flex-col w-full
-            c_large:w-c_large
-          "
-      >
+      <div className="flex flex-col w-full c_large:w-c_large">
         <div className="pt-10 pb-8">
           <h1 className="text-5xl font-light mb-6">Checkout</h1>
           <Link href="/cart" aria-label="Cart">
@@ -185,9 +378,15 @@ const Checkout = ({ context }) => {
                     {errorMessage ? <span>{errorMessage}</span> : ""}
                     <Input
                       onChange={onChange}
-                      value={input.name}
-                      name="name"
-                      placeholder="Cardholder name"
+                      value={input.given_name}
+                      name="given_name"
+                      placeholder="First name"
+                    />
+                    <Input
+                      onChange={onChange}
+                      value={input.family_name}
+                      name="family_name"
+                      placeholder="Last name"
                     />
                     <CardElement className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                     <Input
@@ -212,7 +411,7 @@ const Checkout = ({ context }) => {
                       onChange={onChange}
                       value={input.state}
                       name="state"
-                      placeholder="State"
+                      placeholder="State/County"
                     />
                     <Input
                       onChange={onChange}

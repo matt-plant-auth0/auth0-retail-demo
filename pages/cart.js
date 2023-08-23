@@ -7,16 +7,15 @@ import { slugify } from '../utils/helpers'
 import QuantityPicker from '../components/QuantityPicker'
 import Image from '../components/Image'
 import Head from 'next/head'
-import CartLink from '../components/CartLink'
 
-const Cart = ({ context }) => {
+const Cart = (props) => {
   const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
   useEffect(() => {
     setRenderClientSideComponent(true)
   }, [])
   const {
     numberOfItemsInCart, cart, removeFromCart, total, setItemQuantity
-  } = context
+  } = props.context
   const cartEmpty = numberOfItemsInCart === Number(0)
 
   function increment(item) {
@@ -33,7 +32,6 @@ const Cart = ({ context }) => {
   if (!renderClientSideComponent) return null
 
   return <>
-    <CartLink />
     <div className="flex flex-col items-center pb-10">
       <Head>
         <title>Jamstack ECommerce - Cart</title>
@@ -85,7 +83,7 @@ const Cart = ({ context }) => {
                               {DENOMINATION + item.price}
                             </p>
                           </div>
-                          <div role="button" onClick={() => removeFromCart(item)} className="
+                          <div role="button" onClick={() => props.removeFromCartParent(item)} className="
                           m-0 ml-10 text-gray-900 text-s cursor-pointer
                           ">
                             <FaTimes />
@@ -122,7 +120,7 @@ const Cart = ({ context }) => {
                               </p>
                             </div>
                           </div>
-                          <div role="button" onClick={() => removeFromCart(item)} className="
+                          <div role="button" onClick={() => props.removeFromCartParent(item)} className="
                           m-0 ml-10 text-gray-900 text-s cursor-pointer mr-2
                           ">
                             <FaTimes />

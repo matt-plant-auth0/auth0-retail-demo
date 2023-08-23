@@ -5,18 +5,18 @@ import Image from '../../components/Image'
 import QuantityPicker from '../../components/QuantityPicker'
 import { fetchInventory } from '../../utils/inventoryProvider'
 import { slugify } from '../../utils/helpers'
-import CartLink from '../../components/CartLink'
 import { SiteContext, ContextProviderComponent } from '../../context/mainContext'
 
 const ItemView = (props) => {
   const [numberOfitems, updateNumberOfItems] = useState(1)
   const { product } = props
   const { price, image, name, description } = product
-  const { context: { addToCart }} = props
+  //const { context: { addToCart }} = props
 
   function addItemToCart (product) {
     product["quantity"] = numberOfitems
-    addToCart(product)
+    //addToCart(product)
+    props.addToCartParent(product);
   }
 
   function increment() {
@@ -30,7 +30,6 @@ const ItemView = (props) => {
 
   return (
     <>
-      <CartLink />
       <Head>
         <title>Jamstack ECommerce - {name}</title>
         <meta name="description" content={description} />

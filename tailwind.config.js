@@ -60,6 +60,7 @@ module.exports = {
       },
       inset: {
         'flexiblemargin': "calc((100vw - 1420px) / 2)",
+        'flexiblemargin2': "calc((105vw - 1420px) / 2)",
         '100': '100px',
         '200': '200px',
         '250': '250px',
@@ -167,7 +168,7 @@ module.exports = {
         '-12': '-12',
        },
        backgroundColor: {
-        'primary': '#89bdf9',
+        'primary': process.env.PRIMARY_COLOR || '#89bdf9',
         'light': '#f5f5f5',
         'light-200': '#f0f0f0',
         'light-300': '#e8e8e8'
