@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import Head from 'next/head'
 import DENOMINATION from "../../utils/currencyProvider"
-import { FaLongArrowAltLeft } from "react-icons/fa"
-import Link from "next/link"
 import Image from "../../components/Image"
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { Disclosure } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 export default function Profile (props){
   const { user, error, isLoading } = useUser();
@@ -45,32 +44,54 @@ export default function Profile (props){
           <div className="pt-10 pb-8 border-b">
             <h2 className="text-5xl font-light mb-6">Previous orders</h2>
           </div>
-          <div className="pt-10">
-            <div className="flex items-center">
-              <h3>Order summary:</h3>
-            </div>
-          </div>
-          {orderDetails.orderItems.map((item, index) => {
-            return (
-              <div className="border-b py-10" key={index}>
-                <div className="flex items-center">
-                  <Image
-                    className="w-32 m-0"
-                    src={item.image}
-                    alt={item.name}
-                  />
-                  <p className="m-0 pl-10 text-gray-600">
-                    {item.name}
-                  </p>
-                  <div className="flex flex-1 justify-end">
-                    <p className="m-0 pl-10 text-gray-900 font-semibold">
-                      {DENOMINATION + item.price}
-                    </p>
+          <Disclosure>
+          {({ open }) => (
+            <>
+              <Disclosure.Button className="flex w-full justify-between rounded-lg border-b px-4 py-2 text-left text-sm font-medium">
+                <div className='flex gap-20 justify-cneter'>
+                  <span className='flex-auto'>Order Placed: {new Date(orderDetails.created).toLocaleString()}</span>
+                  <span className='flex-auto'>Number of items: {orderDetails.orderItems.length}</span>
+                  <span className='flex-auto'>Total: {DENOMINATION + orderDetails.amount}</span>
+                  <span className='flex-auto'>#{orderDetails.id}</span>
+                </div>
+                {/*<span>Order Placed: {new Date(orderDetails.created).toLocaleString()} | Number of items: {orderDetails.orderItems.length} | Total: {DENOMINATION + orderDetails.amount} | #{orderDetails.id}</span>*/}
+                <ChevronDownIcon
+                  className={`${
+                    open ? 'rotate-180 transform' : ''
+                  } h-5 w-5 text-purple-500`}
+                />
+              </Disclosure.Button>
+              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <div className="pt-10">
+                  <div className="flex items-center">
+                    <h3>Order summary:</h3>
                   </div>
                 </div>
-              </div>
-            )
-          })}
+                {orderDetails.orderItems.map((item, index) => {
+                  return (
+                    <div className="border-b py-10" key={index}>
+                      <div className="flex items-center">
+                        <Image
+                          className="w-32 m-0"
+                          src={item.image}
+                          alt={item.name}
+                        />
+                        <p className="m-0 pl-10 text-gray-600">
+                          {item.name}
+                        </p>
+                        <div className="flex flex-1 justify-end">
+                          <p className="m-0 pl-10 text-gray-900 font-semibold">
+                            {DENOMINATION + item.price}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </Disclosure.Panel>
+            </>
+          )}
+        </Disclosure>
         </div>
       </div>
   );

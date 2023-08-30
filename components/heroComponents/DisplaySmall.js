@@ -9,7 +9,7 @@ const DisplaySmall = ({ link, title, subtitle, imageSrc }) =>  (
     <Link href={link} aria-label={title}>
 
       <div className="flex flex-column justify-center items-center h-32">
-        <Image alt={title} src={imageSrc} className="w-3/5" />
+        <Image alt={title} src={imageSrc} className="h-full" />
       </div>
       <div className="">
         <p className="text-xl font-semibold mb-1">{title}</p>

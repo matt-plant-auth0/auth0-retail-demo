@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import CartLink from '../components/CartLink'
 import ProfileLink from './ProfileLink';
 import { ContextProviderComponent, SiteContext } from '../context/mainContext'
+import LOGO_URL from '../utils/logoProvider'
 
 
 function buildNavItems(categories){
@@ -29,6 +30,7 @@ function classNames(...classes) {
 function NavBar(props) {
     const { categories } = props;
     let navigation = buildNavItems(categories);
+
     return (
         <Disclosure as="nav">
         {({ open }) => (
@@ -51,7 +53,7 @@ function NavBar(props) {
                     <div className="flex flex-shrink-0 items-center">
                     <img
                         className="h-8 w-auto"
-                        src="/a0_by_okta.png"
+                        src={LOGO_URL}
                         alt="Auth0 Retail Demo"
                     />
                     </div>

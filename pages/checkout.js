@@ -84,7 +84,7 @@ const Checkout = ({ context }) => {
     email: ""
   })
   useEffect(() => {
-    if(!isLoading){
+    if(user && !isLoading){
       setInput({
         given_name: user.name !== user.email ? user.name.split(' ')[0] : "",
         family_name: user.name !== user.email ? user.name.split(' ')[0] : "",
@@ -97,7 +97,7 @@ const Checkout = ({ context }) => {
         privacy: false
       })
     }
-  }, [isLoading])
+  }, [user, isLoading])
 
   const stripe = useStripe()
   const elements = useElements()
@@ -170,7 +170,6 @@ const Checkout = ({ context }) => {
       family_name: family_name,
       email: email
     });
-    // TODO call API
     
     let lastOrder = {
       id: uuid(),
@@ -262,27 +261,64 @@ const Checkout = ({ context }) => {
             )
           })}
         </div>
-        {!user || user.isSubscriptionAccount && (
+        {!user && (
           <>
           <div className="flex flex-1 flex-col md:flex-row">
               <div className="flex flex-1 pt-8 flex-col">
                 <div className="mt-4 pt-10">
                 <div className="pt-10">
                   <Link href="#" onClick={(e) => {
-                    if(!user.isSubscriptionAccount){
-                      e.preventDefault();
-                      document.getElementById('createAccountForm').className = '';
-                    }else{
-                      createAccount(e);
-                    }
+                    e.preventDefault();
+                    document.getElementById('createAccountForm').className = '';
                   }} aria-label="Cart">
                     <div className="cursor-pointer flex  items-center">
-                      { user.isSubscriptionAccount && (
-                        <p className="text-gray-600 text-sm">Would you like to convert to a full account so you can manage your orders? Click here!</p>
-                      )}
-                      { !user.isSubscriptionAccount && (
-                        <p className="text-gray-600 text-sm">Would you like to create an account? Click here!</p>
-                      )}
+                      <p className="text-gray-600 text-sm">Would you like to create an account? Click here!</p>
+                    </div>
+                  </Link>
+                </div>
+                  <form id='createAccountForm' className='hidden' onSubmit={createAccount}>
+                    {errorMessage ? <span>{errorMessage}</span> : ""}
+                    <label className='md:block' htmlFor='terms'>
+                      <input
+                        onChange={onChange}
+                        className="mt-2 shadow py-2 px-3 leading-tight"
+                        type="checkbox"
+                        name="terms"
+                      />
+                      <span className='text-gray-600 text-sm py-2 px-3'>I accept the terms and conditions</span>
+                    </label>
+                    <label className='md:block' htmlFor='privacy'>
+                      <input
+                        onChange={onChange}
+                        className="mt-2 shadow py-2 px-3 leading-tight"
+                        type="checkbox"
+                        name="privacy"
+                      />
+                      <span className='text-gray-600 text-sm py-2 px-3'>I agree that my data will be held in accordance to the privacy policy</span>
+                    </label>
+                    <button
+                      type="submit"
+                      disabled={!stripe}
+                      onClick={createAccount}
+                      className="md:block bg-primary hover:bg-black text-white font-bold py-2 px-4 mt-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                      Continue
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {(user && user.isSubscriptionAccount) && (
+          <>
+          <div className="flex flex-1 flex-col md:flex-row">
+              <div className="flex flex-1 pt-8 flex-col">
+                <div className="mt-4 pt-10">
+                <div className="pt-10">
+                  <Link href="#" onClick={(e) => {createAccount(e)}} aria-label="Cart">
+                    <div className="cursor-pointer flex  items-center">
+                      <p className="text-gray-600 text-sm">Would you like to convert to a full account so you can manage your orders? Click here!</p>
                     </div>
                   </Link>
                 </div>

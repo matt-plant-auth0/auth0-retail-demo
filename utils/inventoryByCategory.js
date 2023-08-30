@@ -2,6 +2,7 @@ function inventoryByCategory (inventory) {
   return inventory.reduce((acc, next) => {
     const categories = next.categories
     categories.forEach(c => {
+      c = c.toLowerCase();
       if (acc[c]) {
         acc[c].items.push(next)
       } else {

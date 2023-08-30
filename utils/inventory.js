@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid'
-
 let inventory = [
   {
     categories: ['new arrivals'], name: 'Timber Gray Sofa 2.0', price: '1000', image: '/products/couch1.png', description: 'Stay a while. The Timber charme chocolat sofa is set atop an oak trim and flaunts fluffy leather back and seat cushions. Over time, this brown leather sofa’s full-aniline upholstery will develop a worn-in vintage look. Snuggle up with your cutie (animal or human) and dive into a bowl of popcorn. This sofa is really hard to leave. Natural color variations, wrinkles and creases are part of the unique characteristics of this leather. It will develop a relaxed vintage look with regular use.', brand: 'Jason Bourne', currentInventory: 4 },
@@ -41,10 +39,5 @@ let inventory = [
   { categories: ['on sale', 'chairs'], name: 'Black Sand Lounge', price: '1600', image: '/products/chair9.png', description: 'You don’t have to go outside to be rugged. The Cigar rawhide sofa features a sturdy corner-blocked wooden frame and raw seams for that Malboro-person look. This brown leather sofa is cozy in a cottage, cabin, or a condo. And the leather (the leather!) becomes more beautiful with use: subtle character markings such as insect bites, healed scars, and grain variation reflects a real vintage. Saddle up and pass the remote.', brand: 'Jason Bourne', currentInventory: 28 },
   { categories: ['on sale', 'chairs'], name: 'Mint Beige Workchair', price: '550', image: '/products/chair10.png', description: 'You don’t have to go outside to be rugged. The Cigar rawhide sofa features a sturdy corner-blocked wooden frame and raw seams for that Malboro-person look. This brown leather sofa is cozy in a cottage, cabin, or a condo. And the leather (the leather!) becomes more beautiful with use: subtle character markings such as insect bites, healed scars, and grain variation reflects a real vintage. Saddle up and pass the remote.', brand: 'Jason Bourne', currentInventory: 31 },  // { 
 ]
-
-inventory.map(i => {
-  i.id = uuid()
-  return i
-})
 
 export default inventory
