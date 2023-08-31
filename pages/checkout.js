@@ -111,7 +111,7 @@ const Checkout = ({ context }) => {
     event.preventDefault()
     const { terms, privacy } = input;
 
-    if (!user.isSubscriptionAccount && (!terms || !privacy)) {
+    if (user && !user.isSubscriptionAccount && (!terms || !privacy)) {
       console.log("Consent not accepted!");
       setErrorMessage("Please accept both below to continue!");
       return
