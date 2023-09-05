@@ -31,6 +31,7 @@ export default handleAuth({
 
         if(hasCookie('current_email', { req, res })){
           current_email = getCookie('current_email', { req, res });
+          console.log('Current email: ' + current_email);
         }
 
         if (!connection) {
