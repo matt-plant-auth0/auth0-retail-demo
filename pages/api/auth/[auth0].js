@@ -34,15 +34,7 @@ export default handleAuth({
           console.log('Current email: ' + current_email);
         }
 
-        if (!connection) {
-          await handleLogin(req, res);
-        } else if (iss) {
-          await handleLogin(req, res, {
-            authorizationParams: {
-              login_hint: current_email
-            }
-          });
-        } else {
+        if (connection) {
           await handleLogin(req, res, {
             authorizationParams: {
               connection: connection,
@@ -50,6 +42,14 @@ export default handleAuth({
             },
             returnTo: "/account/profile",
           });
+        } else if (iss) {
+          await handleLogin(req, res, {
+            authorizationParams: {
+              login_hint: current_email
+            }
+          });
+        } else {
+          await handleLogin(req, res);
         }
       } catch (error) {
         console.error(error);
