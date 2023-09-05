@@ -1,4 +1,4 @@
-import { handleAuth, handleLogin } from '@auth0/nextjs-auth0';
+import { handleAuth, handleLogin, handleCallback } from '@auth0/nextjs-auth0';
 
 export default handleAuth({
     signup: async (req, res) => {
@@ -40,4 +40,16 @@ export default handleAuth({
         console.error(error);
       }
     },
+    callback: async (req, res) => {
+      //either just pop a 'toast' which may not need this code block, or redirect to their favourite category here
+      const afterCallback = (req, res, session, state) => {
+        if (session.user.favourite_categories) {
+          res.setHeader('Location', '/category/football-shirts');
+          return session;
+        } else {
+          return session;
+        }
+      };
+      await handleCallback(req, res, { afterCallback });
+    }
   });
