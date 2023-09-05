@@ -125,7 +125,9 @@ const Checkout = ({ context }) => {
 
     let account = await res.json();
 
-    console.log(account);
+    console.log("Account created successfully!");
+
+    window.sessionStorage.setItem('current_email', personalDetails.email);
 
     window.location.href = account.setPasswordUrl;
 

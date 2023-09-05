@@ -23,10 +23,16 @@ export default handleAuth({
     /* logic for > "/pages/api/auth/login" */
     login: async (req, res) => {
       try {
-        const { connection, login_hint } = req.query;
+        const { connection, login_hint, iss } = req.query;
 
         if (!connection) {
           await handleLogin(req, res);
+        } else if (iss){
+          await handleLogin(req, res, {
+            authorizationParams: {
+              login_hint: window.sessionStorage.getItem('current_email')
+            }
+          });
         } else {
           await handleLogin(req, res, {
             authorizationParams: {
