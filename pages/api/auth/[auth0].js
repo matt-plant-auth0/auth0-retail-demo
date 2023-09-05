@@ -1,4 +1,6 @@
 import { handleAuth, handleLogin, handleCallback } from '@auth0/nextjs-auth0';
+import { hasCookie, getCookie } from 'cookies-next';
+
 
 export default handleAuth({
     signup: async (req, res) => {
@@ -25,12 +27,18 @@ export default handleAuth({
       try {
         const { connection, login_hint, iss } = req.query;
 
+        let current_email = '';
+
+        if(hasCookie('current_email', { req, res })){
+          current_email = getCookie('current_email', { req, res });
+        }
+
         if (!connection) {
           await handleLogin(req, res);
-        } else if (iss){
+        } else if (iss) {
           await handleLogin(req, res, {
             authorizationParams: {
-              login_hint: window.sessionStorage.getItem('current_email')
+              login_hint: current_email
             }
           });
         } else {

@@ -7,6 +7,7 @@ import Link from "next/link"
 import Image from "../components/Image"
 import { v4 as uuid } from "uuid"
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { setCookie } from 'cookies-next';
 
 import {
   CardElement,
@@ -127,7 +128,7 @@ const Checkout = ({ context }) => {
 
     console.log("Account created successfully!");
 
-    window.sessionStorage.setItem('current_email', personalDetails.email);
+    setCookie('current_email', personalDetails.email);
 
     window.location.href = account.setPasswordUrl;
 

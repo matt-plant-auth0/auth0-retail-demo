@@ -19,6 +19,7 @@
     "autoprefixer": "^10.1.0",
     "aws-sdk": "^2.1443.0",
     "axios": "^1.4.0",
+    "cookies-next": "^3.0.0",
     "dotenv": "^16.3.1",
     "next": "^13.4.12",
     "postcss": "^8.2.2",
