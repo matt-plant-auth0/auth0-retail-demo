@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ orderId: orderId });
     }else if(req.method === "GET"){
         console.log(req.query);
-        let orderSearchResults = ordersRepo.find(x => x.email === req.query.email);
+        let orderSearchResults = ordersRepo.filter(x => x.email === req.query.email);
         let orderIds = [];
         if(orderSearchResults && orderSearchResults.length > 0){
           orderIds = orderSearchResults.map(order => { return order.id });
