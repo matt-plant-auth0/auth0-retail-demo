@@ -133,6 +133,8 @@ const Checkout = ({ context }) => {
 
     window.location.href = account.setPasswordUrl;*/
 
+    console.log(personalDetails);
+
     window.location.href = `/api/auth/login?login_hint=${personalDetails.email}&screen_hint=signup&account_details=${JSON.stringify(personalDetails)}`;
 
   }
@@ -170,6 +172,13 @@ const Checkout = ({ context }) => {
       setErrorMessage(error.message)
       return
     }*/
+
+    setPersonalDetails({
+      given_name: given_name,
+      family_name: family_name,
+      email: email,
+      orderIds: []
+    });
     
     let lastOrder = {
       id: uuid(),
