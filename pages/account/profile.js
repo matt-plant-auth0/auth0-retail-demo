@@ -31,27 +31,15 @@ export default function Profile (props){
   const [createdTimestamp, setCreatedTimestamp] = useState(null);
 
   useEffect(() => {
-    //move these to ID token to avoid extra API call
-    async function getFullUser() {
-      let res = await fetch('/api/user/profile');
-      let fullUser = await res.json();
-      setInput({
-        given_name: fullUser.given_name,
-        family_name: fullUser.family_name,
-        email: fullUser.email,
-        weekly_emails: fullUser.app_metadata?.weekly_emails,
-        partner_emails: fullUser.app_metadata?.partner_emails
-      })
-      setCreatedTimestamp(fullUser.app_metadata?.terms_accepted);
-      console.log(user);
-    }
-    getFullUser();
-  }, []);
-
-  useEffect(() => {
     if(!isLoading){
-      console.log(user);
-      
+      setInput({
+        given_name: user.given_name,
+        family_name: user.family_name,
+        email: user.email,
+        weekly_emails: user.weekly_emails,
+        partner_emails: user.partner_emails
+      })
+      setCreatedTimestamp(user.terms_accepted);
     }
   }, [isLoading]);
 
