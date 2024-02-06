@@ -172,13 +172,6 @@ const Checkout = ({ context }) => {
       setErrorMessage(error.message)
       return
     }*/
-
-    setPersonalDetails({
-      given_name: given_name,
-      family_name: family_name,
-      email: email,
-      orderIds: []
-    });
     
     let lastOrder = {
       id: uuid(),
@@ -222,7 +215,12 @@ const Checkout = ({ context }) => {
     }else{
       let orderIdsRes = await fetch(`/api/orders?email=${email}`);
       let orderIds = await orderIdsRes.json();
-      setPersonalDetails({ ...personalDetails, orderIds: orderIds.orderIds });
+      setPersonalDetails({
+        given_name: given_name,
+        family_name: family_name,
+        email: email,
+        orderIds: orderIds.orderIds 
+      });
     }
     
     setOrderCompleted(true)
