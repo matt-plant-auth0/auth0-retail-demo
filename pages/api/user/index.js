@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         let userOrders = ordersRepo.filter(x => x.email === personalDetails.email);
         let orderIds = [];
         if(userOrders && userOrders.length > 0){
-            orderIds = userOrders.map(order => { return order.id });
+          orderIds = userOrders.map(order => { return order.id });
         }
 
         newUser.name = `${personalDetails.given_name} ${personalDetails.family_name}`;

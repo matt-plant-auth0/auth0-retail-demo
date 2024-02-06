@@ -118,7 +118,7 @@ const Checkout = ({ context }) => {
       return
     }
 
-    let res = await fetch('/api/user', { 
+    /*let res = await fetch('/api/user', { 
       method: 'POST', 
       headers: { "Content-Type": "application/json" }, 
       body: JSON.stringify({ personalDetails: personalDetails })
@@ -130,7 +130,9 @@ const Checkout = ({ context }) => {
 
     setCookie('current_email', personalDetails.email);
 
-    window.location.href = account.setPasswordUrl;
+    window.location.href = account.setPasswordUrl;*/
+
+    window.location.href = `/api/auth/login?login_hint=${personalDetails.email}&screen_hint=signup&account_details=${JSON.stringify(personalDetails)}`;
 
   }
 

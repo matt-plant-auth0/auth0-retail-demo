@@ -25,7 +25,7 @@ export default handleAuth({
     /* logic for > "/pages/api/auth/login" */
     login: async (req, res) => {
       try {
-        const { connection, login_hint, iss } = req.query;
+        const { connection, login_hint, iss, account_details, screen_hint } = req.query;
 
         let current_email = '';
 
@@ -34,7 +34,15 @@ export default handleAuth({
           console.log('Current email: ' + current_email);
         }
 
-        if (connection) {
+        if(account_details){
+          await handleLogin(req, res, {
+            authorizationParams: {
+              login_hint: login_hint,
+              screen_hint: screen_hint,
+              account_details: account_details
+            }
+          });
+        } else if (connection) {
           await handleLogin(req, res, {
             authorizationParams: {
               connection: connection,

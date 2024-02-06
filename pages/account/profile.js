@@ -18,6 +18,8 @@ const Input = ({ onChange, value, name, placeholder, readOnly = false }) => (
 
 export default function Profile (props){
   const { user, error, isLoading } = useUser();
+  
+  //console.log(accessToken);
   const [errorMessage, setErrorMessage] = useState(null)
   const [input, setInput] = useState({
     given_name: "",
@@ -29,6 +31,7 @@ export default function Profile (props){
   const [createdTimestamp, setCreatedTimestamp] = useState(null);
 
   useEffect(() => {
+    //move these to ID token to avoid extra API call
     async function getFullUser() {
       let res = await fetch('/api/user/profile');
       let fullUser = await res.json();
@@ -36,14 +39,21 @@ export default function Profile (props){
         given_name: fullUser.given_name,
         family_name: fullUser.family_name,
         email: fullUser.email,
-        weekly_emails: fullUser.app_metadata.weekly_emails,
-        partner_emails: fullUser.app_metadata.partner_emails
+        weekly_emails: fullUser.app_metadata?.weekly_emails,
+        partner_emails: fullUser.app_metadata?.partner_emails
       })
-      setCreatedTimestamp(fullUser.app_metadata.terms_accepted);
+      setCreatedTimestamp(fullUser.app_metadata?.terms_accepted);
       console.log(user);
     }
     getFullUser();
   }, []);
+
+  useEffect(() => {
+    if(!isLoading){
+      console.log(user);
+      
+    }
+  }, [isLoading]);
 
 
   const onChange = e => {
