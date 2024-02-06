@@ -7,7 +7,11 @@ export default async function handler(req, res) {
         return res.status(200).json({ orderId: orderId });
     }else if(req.method === "GET"){
         let orderSearchResults = ordersRepo.find(x => x.email === req.query.email);
-        return res.status(200).json(orderSearchResults);
+        let orderIds = [];
+        if(orderSearchResults && orderSearchResults.length > 0){
+          orderIds = orderSearchResults.map(order => { return order.id });
+        }
+        return res.status(200).json(orderIds);
     }else{
         return res.status(400).json({ msg: "HTTP Method unsupported" });
     }

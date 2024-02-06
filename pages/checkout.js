@@ -82,7 +82,8 @@ const Checkout = ({ context }) => {
   const [personalDetails, setPersonalDetails] = useState({
     given_name: "",
     family_name: "",
-    email: ""
+    email: "",
+    orderIds:[]
   })
   useEffect(() => {
     if(user && !isLoading){
@@ -215,6 +216,10 @@ const Checkout = ({ context }) => {
         headers: { "Content-Type": "application/json" }, 
         body: JSON.stringify({ orderId: orderId.orderId })
       });
+    }else{
+      let orderIdsRes = await fetch(`/api/orders?email=${email}`);
+      let orderIds = await orderIdsRes.json();
+      setPersonalDetails({ ...personalDetails, orderIds: orderIds });
     }
     
     setOrderCompleted(true)
