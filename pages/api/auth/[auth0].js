@@ -12,7 +12,7 @@ export default handleAuth({
                   authorizationParams: {
                     screen_hint: "signup"
                   },
-                  returnTo: "/profile",
+                  returnTo: "/account/profile",
                 });
               } else {
                 await handleLogin(req, res, {
@@ -20,7 +20,7 @@ export default handleAuth({
                         screen_hint: "signup",
                         connection: connection
                     },
-                    returnTo: "/profile",
+                    returnTo: "/account/profile",
                 });
             }
         } catch (error) {
