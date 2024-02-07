@@ -8,14 +8,19 @@ export default handleAuth({
             const { connection } = req.query;
 
             if (!connection) {
-                await handleLogin(req, res);
+                await handleLogin(req, res, {
+                  authorizationParams: {
+                    screen_hint: "signup"
+                  },
+                  returnTo: "/profile",
+                });
               } else {
                 await handleLogin(req, res, {
                     authorizationParams: {
                         screen_hint: "signup",
                         connection: connection
                     },
-                    returnTo: "/",
+                    returnTo: "/profile",
                 });
             }
         } catch (error) {
