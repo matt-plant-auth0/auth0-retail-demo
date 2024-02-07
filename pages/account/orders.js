@@ -6,7 +6,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-export default function Profile (props){
+export default function Orders (props){
   const { user, error, isLoading } = useUser();
   const [errorMessage, setErrorMessage] = useState(null)
   const [userOrders, setUserOrders] = useState([]);
