@@ -23,7 +23,8 @@ function Layout(props) {
     return Children.map(children, (child) => {
       return cloneElement(child, {
         addToCartParent: addToCartParent,
-        removeFromCartParent: removeFromCartParent
+        removeFromCartParent: removeFromCartParent,
+        categories: categories
       });
     });
   }
