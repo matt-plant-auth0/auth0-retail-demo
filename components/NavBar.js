@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { navItemLength } from '../ecommerce.config'
 import { slugify } from '../utils/helpers'
-import fetchCategories from '../utils/categoryProvider'
+import { fetchInventory } from '../utils/inventoryProvider'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import CartLink from '../components/CartLink'
 import ProfileLink from './ProfileLink';
@@ -119,12 +119,35 @@ function NavBarWithContext(props) {
       </ContextProviderComponent>
     )
   }
+
   export async function getStaticProps() {
-    const categories = await fetchCategories()
-    return {
-        props: {
-            categories: categories
+    const inventory = await fetchInventory()
+    
+    const inventoryCategorized = inventory.reduce((acc, next) => {
+      const categories = next.categories
+      categories.forEach(c => {
+        const index = acc.findIndex(item => item.name === c)
+        if (index !== -1) {
+          const item = acc[index]
+          item.itemCount = item.itemCount + 1
+          acc[index] = item
+        } else {
+          const item = {
+            name: c,
+            image: next.image,
+            itemCount: 1
+          }
+          acc.push(item)
         }
+      })
+      return acc
+    }, [])
+    
+    return {
+      props: {
+        inventoryData: inventory,
+        categories: inventoryCategorized
+      }
     }
   }
   
