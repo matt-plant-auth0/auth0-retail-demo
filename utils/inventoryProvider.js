@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid'
-const inventory = require('../data/default_inventory.json');
+//const inventory = require('../data/default_inventory.json');
 
 /*
 Inventory items should adhere to the following schema:
@@ -23,9 +23,10 @@ async function fetchInventory() {
   if(process.env.INVENTORY_URL){
     let res = await fetch(process.env.INVENTORY_URL);
     currentInventory = await res.json();
-  }else{
-    currentInventory = inventory;
   }
+  /*else{
+    currentInventory = inventory;
+  }*/
 
   currentInventory.map(i => {
     i.id = uuid()
