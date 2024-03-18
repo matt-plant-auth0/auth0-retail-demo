@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Disclosure } from '@headlessui/react'
 import { navItemLength } from '../ecommerce.config'
 import { slugify } from '../utils/helpers'
+import fetchCategories from '../utils/categoryProvider'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import CartLink from '../components/CartLink'
 import ProfileLink from './ProfileLink';
@@ -117,6 +118,14 @@ function NavBarWithContext(props) {
         </SiteContext.Consumer>
       </ContextProviderComponent>
     )
+  }
+  export async function getStaticProps() {
+    const categories = await fetchCategories()
+    return {
+        props: {
+            categories: categories
+        }
+    }
   }
   
   export default NavBarWithContext

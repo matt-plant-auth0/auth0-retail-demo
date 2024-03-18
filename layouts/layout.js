@@ -52,7 +52,7 @@ function Layout(props) {
   }
   return (
     <div>
-      <NavBar categories={categories}/>
+      <NavBar/>
       <div className="mobile:px-10 px-4 pb-10 flex justify-center">
         <main className="w-fw">{renderChildren()}</main>
       </div>
