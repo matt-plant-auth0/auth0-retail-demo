@@ -9,10 +9,6 @@ import Image from '../components/Image'
 import Head from 'next/head'
 
 const Cart = (props) => {
-  const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
-  useEffect(() => {
-    setRenderClientSideComponent(true)
-  }, [])
   const {
     numberOfItemsInCart, cart, removeFromCart, total, setItemQuantity
   } = props.context
@@ -28,8 +24,6 @@ const Cart = (props) => {
     item.quantity = item.quantity - 1
     setItemQuantity(item)
   }
-
-  if (!renderClientSideComponent) return null
 
   return <>
     <div className="flex flex-col items-center pb-10">
@@ -167,7 +161,5 @@ function CartWithContext(props) {
     </ContextProviderComponent>
   )
 }
-
-export const dynamic = "force-dynamic";
 
 export default CartWithContext
