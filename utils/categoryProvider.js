@@ -8,6 +8,7 @@ async function fetchCategories () {
     })
     return acc
   }, [])
+  console.log(categories);
   return Promise.resolve(categories)
 }
 
