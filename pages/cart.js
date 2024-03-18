@@ -168,5 +168,6 @@ function CartWithContext(props) {
   )
 }
 
+export const dynamic = "force-dynamic";
 
 export default CartWithContext
