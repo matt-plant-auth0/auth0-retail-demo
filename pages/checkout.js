@@ -7,7 +7,6 @@ import Link from "next/link"
 import Image from "../components/Image"
 import { v4 as uuid } from "uuid"
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { setCookie } from 'cookies-next';
 
 import {
   CardElement,
