@@ -30,7 +30,6 @@ function classNames(...classes) {
 
 function NavBar(props) {
     const { categories } = props;
-    console.log(categories);
     let navigation = buildNavItems(categories);
 
     return (

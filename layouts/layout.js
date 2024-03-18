@@ -47,7 +47,7 @@ function Layout(props) {
     setHasSubscribed(true);
   }
 
-  
+  console.log(categories);
   return (
     <div>
       <NavBar categories={categories}/>
