@@ -7,6 +7,7 @@ import Link from "next/link"
 import Image from "../components/Image"
 import { v4 as uuid } from "uuid"
 import { useUser } from '@auth0/nextjs-auth0/client';
+import fetchCategories from '../utils/categoryProvider'
 
 import {
   CardElement,
@@ -512,6 +513,16 @@ const Checkout = ({ context }) => {
       </div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const categories = await fetchCategories()
+  
+  return {
+    props: {
+      categories: categories
+    }
+  }
 }
 
 export default CheckoutWithContext

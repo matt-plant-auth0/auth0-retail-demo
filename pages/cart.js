@@ -6,6 +6,7 @@ import { slugify } from '../utils/helpers'
 import QuantityPicker from '../components/QuantityPicker'
 import Image from '../components/Image'
 import Head from 'next/head'
+import fetchCategories from '../utils/categoryProvider'
 
 const Cart = (props) => {
   const {
@@ -159,6 +160,16 @@ function CartWithContext(props) {
       </SiteContext.Consumer>
     </ContextProviderComponent>
   )
+}
+
+export async function getStaticProps() {
+  const categories = await fetchCategories()
+  
+  return {
+    props: {
+      categories: categories
+    }
+  }
 }
 
 export default CartWithContext
