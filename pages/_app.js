@@ -4,6 +4,7 @@ import fetchCategories from '../utils/categoryProvider'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 function Ecommerce({ Component, pageProps, categories }) {
+  console.log(categories);
   return (
     <UserProvider>
       <Layout categories={categories}>
