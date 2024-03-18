@@ -24,7 +24,6 @@ function Layout(props) {
       return cloneElement(child, {
         addToCartParent: addToCartParent,
         removeFromCartParent: removeFromCartParent,
-        categories: categories
       });
     });
   }
