@@ -21,7 +21,8 @@ function CartLink(props) {
 
         </Link>
         {
-          renderClientSideComponent && numberOfItemsInCart > Number(0) && (
+          //renderClientSideComponent &&
+          numberOfItemsInCart > Number(0) && (
             <FaCircle color={primary} size={12} suppressHydrationWarning />
           )
         }
