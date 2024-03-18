@@ -6,7 +6,7 @@ export default handleAuth({
     signup: async (req, res) => {
         try {
             const { connection } = req.query;
-
+            
             if (!connection) {
                 await handleLogin(req, res, {
                   authorizationParams: {

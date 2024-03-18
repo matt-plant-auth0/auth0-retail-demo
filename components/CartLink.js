@@ -7,10 +7,10 @@ const { primary } = colors
 
 function CartLink(props) {
   let { context: { numberOfItemsInCart = 0 }} = props
-  const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
-  useEffect(() => {
+  //const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
+  /*useEffect(() => {
     setRenderClientSideComponent(true)
-  }, [])
+  }, [])*/
   
   return (
     <div>
