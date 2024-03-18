@@ -7,10 +7,10 @@ const { primary } = colors
 
 function CartLink(props) {
   let { context: { numberOfItemsInCart = 0 }} = props
-  //const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
-  /*useEffect(() => {
+  const [renderClientSideComponent, setRenderClientSideComponent] = useState(false)
+  useEffect(() => {
     setRenderClientSideComponent(true)
-  }, [])*/
+  }, [])
   
   return (
     <div>
@@ -21,8 +21,7 @@ function CartLink(props) {
 
         </Link>
         {
-          //renderClientSideComponent &&
-          numberOfItemsInCart > Number(0) && (
+          renderClientSideComponent && numberOfItemsInCart > Number(0) && (
             <FaCircle color={primary} size={12} suppressHydrationWarning />
           )
         }
